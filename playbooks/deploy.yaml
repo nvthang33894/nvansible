@@ -1,0 +1,8 @@
+- name: Deploy SaaS App
+  hosts: app
+  become: yes
+
+  roles:
+    - common
+    - app
+    - nginx

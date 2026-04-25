@@ -1,0 +1,7 @@
+app_name: "customer-a-app"
+app_port: 3000
+
+git_repo: "https://github.com/your/repo.git"
+deploy_path: "/opt/customer-a"
+
+redis_host: "1.2.3.5"

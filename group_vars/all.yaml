@@ -1,0 +1,2 @@
+env: production
+deploy_user: ubuntu
