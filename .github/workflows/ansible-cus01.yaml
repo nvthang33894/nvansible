@@ -3,7 +3,7 @@ name: Deploy SaaS
 on:
 push:
 branches:
-- main
+- plan   # chạy khi push vào branch plan
 
 jobs:
 deploy:
@@ -11,7 +11,8 @@ runs-on: ubuntu-latest
 
 
 steps:
-  - uses: actions/checkout@v4
+  - name: Checkout code
+    uses: actions/checkout@v4
 
   - name: Setup SSH
     run: |
@@ -19,12 +20,27 @@ steps:
       echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
       chmod 600 ~/.ssh/id_rsa
 
+  - name: Add known_hosts
+    run: |
+      ssh-keyscan -H 1.2.3.4 >> ~/.ssh/known_hosts
+
   - name: Install Ansible
     run: |
       sudo apt update
       sudo apt install -y ansible
 
-  - name: Deploy
+  - name: Syntax check
+    run: |
+      ansible-playbook --syntax-check ansible/playbooks/deploy.yml
+
+  - name: Dry run (check mode)
+    run: |
+      ansible-playbook \
+        -i ansible/inventories/cus01/hosts.ini \
+        ansible/playbooks/deploy.yml \
+        --check --diff
+
+  - name: Deploy (real run)
     run: |
       ansible-playbook \
         -i ansible/inventories/cus01/hosts.ini \

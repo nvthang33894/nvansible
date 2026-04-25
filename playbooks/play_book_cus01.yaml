@@ -1,0 +1,12 @@
+- name: Get current stat
+  stat:
+    path: /etc/ssh/sshd_config
+  register: file_stat
+
+- name: Deploy config giữ nguyên permission
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    owner: "{{ file_stat.stat.pw_name }}"
+    group: "{{ file_stat.stat.gr_name }}"
+    mode: "{{ file_stat.stat.mode }}"
