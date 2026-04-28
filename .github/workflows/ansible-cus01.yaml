@@ -21,7 +21,7 @@ steps:
       chmod 600 ~/.ssh/id_rsa
 
   - name: Add known_hosts
-    run: |
+    run: 
       ssh-keyscan -H 1.2.3.4 >> ~/.ssh/known_hosts
 
   - name: Install Ansible
@@ -39,10 +39,4 @@ steps:
         -i ansible/inventories/cus01/hosts.ini \
         ansible/playbooks/deploy.yml \
         --check --diff
-
-  - name: Deploy (real run)
-    run: |
-      ansible-playbook \
-        -i ansible/inventories/cus01/hosts.ini \
-        ansible/playbooks/deploy.yml
 
